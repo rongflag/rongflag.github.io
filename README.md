@@ -1,2 +1,2 @@
-# rongflag.github.io
-blog
+# 博客地址:
+rongflag.github.io
