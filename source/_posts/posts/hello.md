@@ -10,3 +10,7 @@ categories:
 
 # Hello
 你好世界
+
+<!-- more -->
+
+全文内容
