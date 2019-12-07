@@ -1,7 +1,7 @@
 ---
 title: security（3）自定义数据库认证与授权
 url: security3
-date: 2019年12月6日, PM 10:25:07
+date: 2019-12-06 23:12:00
 tags:
   - security
 categories:
@@ -9,6 +9,11 @@ categories:
 ---
 
 # security（3）自定义数据库认证与授权
+
+这里会通过自定义数据库的方式或者用户信息，来进行认证与授权
+
+<!-- more -->
+
 先创建数据库的表
 
 ```sql

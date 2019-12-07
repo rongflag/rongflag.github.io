@@ -1,7 +1,7 @@
 ---
 title: security（2）初识认证与授权
 url: security2
-date: 2019年12月6日, PM 10:04:00
+date: 2019-12-06 22:04:00
 tags:
   - security
 categories:
@@ -13,6 +13,8 @@ categories:
 # security（2）初识认证与授权
 
 这里会基础的见一下认证和授权基于**内存**和**数据库**
+
+<!-- more -->
 
 pom.xml(为了方便就把数据库配置一起加进去了)
 

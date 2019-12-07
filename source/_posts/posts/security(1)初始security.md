@@ -1,7 +1,7 @@
 ---
 title: security(1)初始security
 url: security1
-date: 2019年12月5日, PM 10:35:57
+date: 2019-12-05 22:14:00
 tags:
   - security
 categories:
@@ -11,6 +11,8 @@ categories:
 # security(1)初始security
 
 security在springcloud里面使用会好一些。现在就从头开始来进行security学习一遍。
+
+<!-- more -->
 
 ## 1. 创建项目引入依赖
 
