@@ -12,6 +12,10 @@ categories:
 
 Security番外篇
 
+这篇主要说的是 HttpSecurity各种配置的方法及意义。这个用到哪里就会说到哪里
+
+<!-- more -->
+
 ```java
  http.authorizeRequests()
                 .antMatchers("/admin/api/**").hasIpAddress("")
