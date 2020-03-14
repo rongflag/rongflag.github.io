@@ -22,8 +22,6 @@ before_install:
 - export PATH=$HOME/.yarn/bin:$PATH
 # npm模块安装
 - yarn global add hexo-cli
-- yarn remove hexo-renderer-marked
-- yarn add hexo-renderer-kramed
 - yarn add hexo-generator-searchdb
 - yarn add hexo-generator-sitemap
 - yarn add hexo-generator-baidu-sitemap
