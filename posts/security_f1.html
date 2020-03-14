@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/config/favicon-32x32-next.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/config/favicon-16x16-next.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Consolas:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"rongflag.github.io","root":"/","scheme":"Mist","version":"7.7.2","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":true},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Security番外篇 这篇主要说的是 HttpSecurity各种配置的方法及意义。这个用到哪里就会说到哪里">
+<meta property="og:type" content="article">
+<meta property="og:title" content="番外篇HttpSecurity配置意思">
+<meta property="og:url" content="http://rongflag.github.io/posts/security_f1.html">
+<meta property="og:site_name" content="aihuxi">
+<meta property="og:description" content="Security番外篇 这篇主要说的是 HttpSecurity各种配置的方法及意义。这个用到哪里就会说到哪里">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-12-08T07:14:23.000Z">
+<meta property="article:modified_time" content="2020-03-14T09:32:29.723Z">
+<meta property="article:author" content="aihuxi">
+<meta property="article:tag" content="security">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://rongflag.github.io/posts/security_f1.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>番外篇HttpSecurity配置意思 | aihuxi</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?87dea63fe45786c066458087bf7acb2f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/rss.xml" title="aihuxi" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">aihuxi</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">rongflag</h1>
+      
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">3</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">3</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">9</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/rongflag" class="github-corner" title="我的Github" aria-label="我的Github" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://rongflag.github.io/posts/security_f1.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/config/avatar.jpg">
+      <meta itemprop="name" content="aihuxi">
+      <meta itemprop="description" content="爱呼吸的鱼🐠咕泡泡，咕嘟咕嘟~~">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="aihuxi">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          番外篇HttpSecurity配置意思<a href="https://github.com/rongflag/rongflag.github.io/blob/source/source/_posts/posts/Security%E7%95%AA%E5%A4%96%E7%AF%87.md" class="post-edit-link" title="编辑" rel="noopener" target="_blank"><i class="fa fa-pencil"></i></a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-08 15:14:23" itemprop="dateCreated datePublished" datetime="2019-12-08T15:14:23+08:00">2019-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/security/" itemprop="url" rel="index"><span itemprop="name">security</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/posts/security_f1.html" class="post-meta-item leancloud_visitors" data-flag-title="番外篇HttpSecurity配置意思" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/posts/security_f1.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/posts/security_f1.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>11 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Security番外篇</p>
+<p>这篇主要说的是 HttpSecurity各种配置的方法及意义。这个用到哪里就会说到哪里</p>
+<a id="more"></a>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">http.authorizeRequests()</span><br><span class="line">               .antMatchers(<span class="string">"/admin/api/**"</span>).hasIpAddress(<span class="string">""</span>)</span><br><span class="line">               .antMatchers(<span class="string">"/admin/api/**"</span>).hasRole(<span class="string">"admin"</span>)</span><br><span class="line">               .antMatchers(<span class="string">"/user/api/**"</span>).hasRole(<span class="string">"user"</span>)</span><br><span class="line">               .antMatchers(<span class="string">"/app/api/**"</span>, <span class="string">"/captcha.jpg"</span>).permitAll()</span><br><span class="line">               .anyRequest().authenticated()</span><br><span class="line">               .and()</span><br><span class="line">               .formLogin()</span><br><span class="line">               .failureHandler(<span class="keyword">new</span> SecurityAuthenticationFailureHandler())</span><br><span class="line">               .successHandler(<span class="keyword">new</span> SecurityAuthenticationSuccessHandler())</span><br><span class="line">               .loginPage(<span class="string">"/myLogin.html"</span>)</span><br><span class="line">               .loginProcessingUrl(<span class="string">"/login"</span>)</span><br><span class="line">               .permitAll()</span><br><span class="line">               .and()</span><br><span class="line">               .csrf()</span><br><span class="line">               .disable();</span><br></pre></td></tr></table></figure>
+
+<p>其实我们需要好好考虑一下HttpSecurity那么多配置方法到底代表什么意思。我们一起来说一下常用的方法吧。</p>
+<table>
+<thead>
+<tr>
+<th><strong>方法</strong></th>
+<th><strong>说明</strong></th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>openidLogin()</strong></td>
+<td>用于基于 OpenId 的验证</td>
+<td>OpenIDLoginConfigurer</td>
+</tr>
+<tr>
+<td><strong>headers()</strong></td>
+<td>将安全标头添加到响应</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>cors()</strong></td>
+<td>配置跨域资源共享（ CORS ）</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>sessionManagement()</strong></td>
+<td>允许配置会话管理</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>portMapper()</strong></td>
+<td>允许配置一个PortMapper(HttpSecurity#(getSharedObject(class)))，其他提供SecurityConfigurer的对象使用 PortMapper 从 HTTP 重定向到 HTTPS 或者从 HTTPS 重定向到 HTTP。默认情况下，Spring Security使用一个PortMapperImpl映射 HTTP 端口8080到 HTTPS 端口8443，HTTP 端口80到 HTTPS 端口443</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>jee()</strong></td>
+<td>配置基于容器的预认证。 在这种情况下，认证由Servlet容器管理</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>x509()</strong></td>
+<td>配置基于x509的认证</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>rememberMe</strong></td>
+<td>允许配置“记住我”的验证</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="#authorizeRequests"><strong>authorizeRequests()</strong></a></td>
+<td>允许基于使用HttpServletRequest限制访问</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>requestCache()</strong></td>
+<td>允许配置请求缓存</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>exceptionHandling()</strong></td>
+<td>允许配置错误处理</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>securityContext()</strong></td>
+<td>在HttpServletRequests之间的SecurityContextHolder上设置SecurityContext的管理。 当使用WebSecurityConfigurerAdapter时，这将自动应用</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>servletApi()</strong></td>
+<td>将HttpServletRequest方法与在其上找到的值集成到SecurityContext中。 当使用WebSecurityConfigurerAdapter时，这将自动应用</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>csrf()</strong></td>
+<td>添加 CSRF 支持，使用WebSecurityConfigurerAdapter时，默认启用</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>logout()</strong></td>
+<td>添加退出登录支持。当使用WebSecurityConfigurerAdapter时，这将自动应用。默认情况是，访问URL”/ logout”，使HTTP Session无效来清除用户，清除已配置的任何#rememberMe()身份验证，清除SecurityContextHolder，然后重定向到”/login?success”</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>anonymous()</strong></td>
+<td>允许配置匿名用户的表示方法。 当与WebSecurityConfigurerAdapter结合使用时，这将自动应用。 默认情况下，匿名用户将使用org.springframework.security.authentication.AnonymousAuthenticationToken表示，并包含角色 “ROLE_ANONYMOUS”</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>formLogin()</strong></td>
+<td>指定支持基于表单的身份验证。如果未指定FormLoginConfigurer#loginPage(String)，则将生成默认登录页面</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>oauth2Login()</strong></td>
+<td>根据外部OAuth 2.0或OpenID Connect 1.0提供程序配置身份验证</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>requiresChannel()</strong></td>
+<td>配置通道安全。为了使该配置有用，必须提供至少一个到所需信道的映射</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>httpBasic()</strong></td>
+<td>配置 Http Basic 验证</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>addFilterAt()</strong></td>
+<td>在指定的Filter类的位置添加过滤器</td>
+<td></td>
+</tr>
+<tr>
+<td>and()</td>
+<td>重新获得HttpSercurity</td>
+<td></td>
+</tr>
+<tr>
+<td>permitAll()</td>
+<td>不允许匿名访问，不需要权限</td>
+<td></td>
+</tr>
+</tbody></table>
+<ol>
+<li><p><a href="#authorizeRequests">authorizeRequests</a></p>
+<p>返回值： ExpressionInterceptUrlRegistry</p>
+</li>
+<li><p><a href="#formLogin">formLogin    </a>         </p>
+<p>返回值 FormLoginConfigurer</p>
+</li>
+<li><p><a href="#cors">cors</a>       </p>
+<p>返回值  CorsConfigurer</p>
+</li>
+<li><p>sessionManagement    </p>
+<p>返回值 SessionManagementConfigurer</p>
+</li>
+<li><p><a href="#httpBasic">httpBasic</a>        </p>
+<p>返回值 HttpBasicConfigurer</p>
+</li>
+<li><p>rememberMe                    </p>
+<p>返回值 RememberMeConfigurer</p>
+</li>
+<li><p><a href="#csrf">csrf</a></p>
+<p>返回值 CsrfConfigurer</p>
+</li>
+<li><p>jee() </p>
+<p>返回值：JeeConfigurer </p>
+</li>
+<li><p><a href="#logout">logout</a></p>
+<p>返回值： LogoutConfigurer</p>
+</li>
+<li><p>anonymous</p>
+<p>返回值：AnonymousConfigurer</p>
+</li>
+<li><p>exceptionHandling</p>
+<p>返回值：ExceptionHandlingConfigurer</p>
+</li>
+<li><p>userDetailsService(UserDetailsService userDetailsService)</p>
+<p>返回值：HttpSecurity</p>
+</li>
+<li><p>servletApi</p>
+<p>返回值：ServletApiConfigurer</p>
+</li>
+<li><p>x509() </p>
+<p>返回值：X509Configurer </p>
+</li>
+<li><p>openidLogin()</p>
+<p>返回值：OpenIDLoginConfigurer </p>
+</li>
+<li><p>requestCache </p>
+<p>返回值：RequestCacheConfigurer</p>
+</li>
+<li><p>headers() </p>
+<p>返回值：HeadersConfigurer </p>
+</li>
+<li><p>oauth2Login</p>
+<p>返回值：OAuth2LoginConfigurer</p>
+</li>
+<li><p>oauth2Client</p>
+<p>返回值：OAuth2ClientConfigurer</p>
+</li>
+<li><p>oauth2ResourceServer</p>
+<p>返回值：OAuth2ResourceServerConfigurer</p>
+</li>
+<li><p>requiresChannel</p>
+<p>返回值：ChannelRequestMatcherRegistry</p>
+</li>
+<li><p>portMapper  </p>
+<p>返回值：PortMapperConfigurer </p>
+</li>
+<li><p>beforeConfigure</p>
+<p>返回值：void</p>
+</li>
+<li><p>performBuild</p>
+<p>返回值：DefaultSecurityFilterChain</p>
+</li>
+<li><p>authenticationProvider</p>
+<p>返回值：HttpSecurity</p>
+</li>
+<li><p>securityContext </p>
+<p>返回值：SecurityContextConfigurer  </p>
+</li>
+<li><p>getAuthenticationRegistry</p>
+<p>返回值：AuthenticationManagerBuilder</p>
+</li>
+<li><p>addFilterAfter(Filter filter, Class&lt;? extends Filter&gt; afterFilter)</p>
+<p>返回值：HttpSecurity</p>
+</li>
+<li><p>addFilterBefore(Filter filter,Class&lt;? extends Filter&gt; beforeFilter)、</p>
+<p>返回值：HttpSecurity</p>
+</li>
+<li><p>addFilter(Filter filter)</p>
+<p>返回值：HttpSecurity</p>
+</li>
+<li><p>addFilterAt(Filter filter, Class&lt;? extends Filter&gt; atFilter)</p>
+<p>返回值：HttpSecurity</p>
+</li>
+<li><p>requestMatchers（基本不直接使用）</p>
+<p>返回值 RequestMatcherConfigurer</p>
+</li>
+<li><p>requestMatcher(RequestMatcher requestMatcher)（基本不直接使用）</p>
+<p>返回值：HttpSecurity</p>
+</li>
+<li><p>antMatcher(String antPattern)（基本不直接使用）</p>
+<p>返回值：HttpSecurity</p>
+</li>
+<li><p>mvcMatcher(String mvcPattern)（基本不直接使用）</p>
+<p>返回值：HttpSecurity</p>
+</li>
+<li><p>regexMatcher(String pattern)（基本不直接使用）</p>
+<p>返回值：HttpSecurity</p>
+</li>
+</ol>
+<h2 id="1-authorizeRequests"><a href="#1-authorizeRequests" class="headerlink" title="1.authorizeRequests()"></a><a name="authorizeRequests">1.authorizeRequests()</a></h2><p>执行这个方法后，主要是配置各种请求路径，资源与权限的关系；</p>
+<h3 id="1-配置路径"><a href="#1-配置路径" class="headerlink" title="1.配置路径"></a>1.配置路径</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>anyRequest</td>
+<td>所有请求</td>
+</tr>
+<tr>
+<td>antMatchers</td>
+<td>配置请求路径</td>
+</tr>
+<tr>
+<td>mvcMatchers</td>
+<td></td>
+</tr>
+<tr>
+<td>regexMatchers</td>
+<td></td>
+</tr>
+<tr>
+<td>requestMatchers</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>执行了这个方法其实才获得了ExpressionUrlAuthorizationConfigurer，下面是介绍：</p>
+<blockquote>
+<p>​    Adds URL based authorization based upon SpEL expressions to an application. </p>
+<p>​    基于应用程序的SpEL表达式的dds基于URL的授权。</p>
+<p>At least one {@link org.springframework.web.bind.annotation.RequestMapping} needs to be mapped</p>
+<p>to {@link ConfigAttribute}’s for this {@link SecurityContextConfigurer} to have meaning. </p>
+<p>至少需要映射一个RequestMapping使SecurityContextConfigurer具有ConfigAttribute意义</p>
+</blockquote>
+<h3 id="2-配置所需权限操作ExpressionUrlAuthorizationConfigurer"><a href="#2-配置所需权限操作ExpressionUrlAuthorizationConfigurer" class="headerlink" title="2. 配置所需权限操作ExpressionUrlAuthorizationConfigurer"></a>2. 配置所需权限操作ExpressionUrlAuthorizationConfigurer</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> String permitAll = <span class="string">"permitAll"</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String denyAll = <span class="string">"denyAll"</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String anonymous = <span class="string">"anonymous"</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String authenticated = <span class="string">"authenticated"</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String fullyAuthenticated = <span class="string">"fullyAuthenticated"</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String rememberMe = <span class="string">"rememberMe"</span>;</span><br></pre></td></tr></table></figure>
+
+<p>方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.antMatchers(&quot;&#x2F;user&#x2F;api&#x2F;**&quot;).hasRole(&quot;user&quot;)</span><br><span class="line">.antMatchers(&quot;&#x2F;admin&#x2F;api&#x2F;**&quot;).hasIpAddress(&quot;&quot;)</span><br><span class="line">.antMatchers(&quot;&#x2F;app&#x2F;api&#x2F;**&quot;, &quot;&#x2F;captcha.jpg&quot;).permitAll() # 放弃验证但是必须要登录</span><br><span class="line">.anyRequest().authenticated() # 所有验证</span><br></pre></td></tr></table></figure>
+
+
+
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>hasAnyRole</td>
+<td></td>
+</tr>
+<tr>
+<td>hasRole</td>
+<td></td>
+</tr>
+<tr>
+<td>hasAuthority</td>
+<td></td>
+</tr>
+<tr>
+<td>hasAnyAuthority</td>
+<td></td>
+</tr>
+<tr>
+<td>hasIpAddress</td>
+<td></td>
+</tr>
+<tr>
+<td>authenticated</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="2-formLogin"><a href="#2-formLogin" class="headerlink" title="2.formLogin"></a>2.<a name="formLogin">formLogin</a></h2><p>配置成功 失败的路径和页面</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.failureHandler(<span class="keyword">new</span> SecurityAuthenticationFailureHandler())</span><br><span class="line">              .successHandler(<span class="keyword">new</span> SecurityAuthenticationSuccessHandler())</span><br><span class="line">              .loginPage(<span class="string">"/myLogin.html"</span>)</span><br><span class="line">              .loginProcessingUrl(<span class="string">"/login"</span>)</span><br><span class="line">              .defaultSuccessUrl(<span class="string">""</span>)</span><br><span class="line">              .authenticationDetailsSource(<span class="keyword">null</span>)</span><br><span class="line">              .failureForwardUrl(<span class="string">""</span>)</span><br><span class="line">              .failureUrl(<span class="string">""</span>)</span><br><span class="line">              .permitAll()</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-cors"><a href="#3-cors" class="headerlink" title="3. cors"></a>3. <a name="cors">cors</a></h2><p>跨域</p>
+<h2 id="5-httpBasic"><a href="#5-httpBasic" class="headerlink" title="5.httpBasic"></a>5.<a name="httpBasic">httpBasic</a></h2><p>asic身份认证，是HTTP 1.0中引入的认证方案之一。虽然方案比较古老，同时存在安全缺陷，但由于实现简单，所以仍有部分场景下在使用，例如Tomcat自带的有个manager项目，访问这个项目需要Basic认证</p>
+<p><strong>默认页面弹出个框</strong></p>
+<h2 id="7-csrf"><a href="#7-csrf" class="headerlink" title="7.csrf"></a>7.<a name="csrf">csrf</a></h2><p>禁用csrf 保护功能</p>
+<h2 id="9-logout"><a href="#9-logout" class="headerlink" title="9.logout"></a>9.<a name="logout">logout</a></h2><p>退出配置  默认的是“logout”</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.addLogoutHandler(<span class="keyword">null</span>)</span><br><span class="line">               .clearAuthentication()</span><br><span class="line">               .deleteCookies()</span><br><span class="line">               .logoutRequestMatcher()</span><br><span class="line">               .logoutSuccessHandler()</span><br><span class="line">               .logoutSuccessUrl()</span><br><span class="line">               .logoutUrl()</span><br><span class="line">               .defaultLogoutSuccessHandlerFor()</span><br><span class="line">               .invalidateHttpSession()</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/posts/security1.html" rel="bookmark">security(1)初始security</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/posts/security4.html" rel="bookmark">security(4)Filter实现验证码</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/posts/security6.html" rel="bookmark">security(6)自动 登录</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/posts/security2.html" rel="bookmark">security（2）初识认证与授权</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/posts/security3.html" rel="bookmark">security（3）自定义数据库认证与授权</a></div>
+    </li>
+  </ul>
+
+        <div class="reward-container">
+  <div>点击赞赏!</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/config/wechatpay.jpg" alt="aihuxi 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/config/alipay.jpg" alt="aihuxi 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>aihuxi
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://rongflag.github.io/posts/security_f1.html" title="番外篇HttpSecurity配置意思">http://rongflag.github.io/posts/security_f1.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/security/" rel="tag"># security</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/security3.html" rel="prev" title="security（3）自定义数据库认证与授权">
+      <i class="fa fa-chevron-left"></i> security（3）自定义数据库认证与授权
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/security4.html" rel="next" title="security(4)Filter实现验证码">
+      security(4)Filter实现验证码 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-authorizeRequests"><span class="nav-number">1.</span> <span class="nav-text">1.authorizeRequests()</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-配置路径"><span class="nav-number">1.1.</span> <span class="nav-text">1.配置路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-配置所需权限操作ExpressionUrlAuthorizationConfigurer"><span class="nav-number">1.2.</span> <span class="nav-text">2. 配置所需权限操作ExpressionUrlAuthorizationConfigurer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-formLogin"><span class="nav-number">2.</span> <span class="nav-text">2.formLogin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-cors"><span class="nav-number">3.</span> <span class="nav-text">3. cors</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-httpBasic"><span class="nav-number">4.</span> <span class="nav-text">5.httpBasic</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-csrf"><span class="nav-number">5.</span> <span class="nav-text">7.csrf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-logout"><span class="nav-number">6.</span> <span class="nav-text">9.logout</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="aihuxi"
+      src="/images/config/avatar.jpg">
+  <p class="site-author-name" itemprop="name">aihuxi</p>
+  <div class="site-description" itemprop="description">爱呼吸的鱼🐠咕泡泡，咕嘟咕嘟~~</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/rongflag" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;rongflag" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      友链
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://blog.ahao.moe/" title="http:&#x2F;&#x2F;blog.ahao.moe" rel="noopener" target="_blank">Ahaochan</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">aihuxi</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">47k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:33</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.7.2
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    url = encodeURI(url);
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.getAttribute('id'));
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .then(() => {
+                leancloudSelector(url).innerText = counter.time + 1;
+              })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              })
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.getAttribute('id'));
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=AnwN5KIpnOmsRJw0rkBh6TaB-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : 'AnwN5KIpnOmsRJw0rkBh6TaB-gzGzoHsz',
+            'X-LC-Key'    : 's3UxFR3XJUYv5G2jNPqKLt5R',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('div.pdf').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/pdfobject@2/pdfobject.min.js', () => {
+    document.querySelectorAll('div.pdf').forEach(element => {
+      PDFObject.embed(element.getAttribute('target'), element, {
+        pdfOpenParams: {
+          navpanes : 0,
+          toolbar  : 0,
+          statusbar: 0,
+          pagemode : 'thumbs',
+          view     : 'FitH'
+        },
+        PDFJS_URL: '/lib/pdf/web/viewer.html',
+        height   : element.getAttribute('height') || '500px'
+      });
+    });
+  }, window.PDFObject);
+}
+</script>
+
+
+
+
+  
+
+  
+
+  
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri == 'http://rongflag.github.io/posts/security_f1.html',]
+      });
+      });
+  </script>
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'AnwN5KIpnOmsRJw0rkBh6TaB-gzGzoHsz',
+      appKey     : 's3UxFR3XJUYv5G2jNPqKLt5R',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1.2,"jsonPath":"https://cdn.jsdelivr.net/npm/live2d-widget-model-hijiki@1.0.5/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
