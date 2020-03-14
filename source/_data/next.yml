@@ -798,7 +798,7 @@ gitalk:
 # Star rating support to each article.
 # To get your ID visit https://widgetpack.com
 rating:
-    enable: false
+  enable: false
   id:     # <app_id>
   color:  fc6423
 
