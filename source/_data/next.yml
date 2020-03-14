@@ -1000,9 +1000,9 @@ pace:
 # Dependencies: https://github.com/theme-next/theme-next-three
 three:
   enable: false
-three_waves: false
-canvas_lines: false
-canvas_sphere: false
+  three_waves: false
+  canvas_lines: false
+  canvas_sphere: false
 
 # Canvas-nest
 # Dependencies: https://github.com/theme-next/theme-next-canvas-nest
