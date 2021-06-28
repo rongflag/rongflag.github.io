@@ -30,17 +30,11 @@
             coverpage: true,
             // 只需要封面页
             onlyCover: true,
+			// 入口文件改为 /home.md
+			homepage: 'home.md',
+			name: false,
             // 搜索
-            search: {
-                maxAge: 86400000, // 过期时间，单位毫秒，默认一天
-                paths: [], // or 'auto'
-                placeholder: 'Type to search',
-
-                // 支持本地化
-                placeholder: {
-                    '/': '搜索'
-                },
-            }
+           search: 'auto',
 
 
         }
