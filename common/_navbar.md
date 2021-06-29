@@ -14,7 +14,7 @@
 
 * [🧅 教程]()
 
-  * [ linux](/course/centos)
+  * [ linux](/course/centos/)
   
 * [🥜 杂项]()
 
