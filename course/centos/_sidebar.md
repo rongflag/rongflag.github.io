@@ -23,7 +23,7 @@
 
 * [11-IP分配](/course/centos/11-IP分配)
 
-* [最重要](/course/centos/最重要)
+* [最常用](/course/centos/最常用)
 
   
 
