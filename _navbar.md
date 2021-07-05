@@ -6,9 +6,8 @@
 
 * [🥕 java]()
 
-  * [收集](/java/)
-
-  
+  * [收集](/java/collect/)
+  * [springboot](/java/springboot/)
 
 * [🌽 微服务]()
 

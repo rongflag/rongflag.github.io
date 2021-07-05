@@ -7,5 +7,5 @@
 > 一个菜鸡程序员的日常总结
 
 [GitHub](https://github.com/docsifyjs/docsify/)
-[Get Started](/common/)
+[Get Started](/home)
 
