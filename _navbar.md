@@ -1,29 +1,24 @@
 <!-- _navbar.md -->
+
+<!-- 上面 -->
+
 * [首页](/)
 
 * [🥕 java]()
-  * [ Spring ](/java/spring/)
-  * [ Springboot ](/java/springboot/)
-  * [ mybatis ](/java/mybatis/)
-  * [ netty ](/java/netty/)
+
+  * [收集](/java/collect/)
+  * [springboot](/java/springboot/)
+  * [spring](/java/spring/)
 
 * [🌽 微服务]()
-  * [ Spring ](/java/spring/)
-  * [ Springboot ](/java/springboot/)
-  * [ mybatis ](/java/mybatis/)
-  * [ netty ](/java/netty/)
-* [🌶 前端]()
-  * [ vue ](/data/doc/)
-  * [ es6 ](/data/doc/)
-  * [ typescript ](/data/doc/)
-  * [ 其他 ](/data/doc/)
-* [🧅 教程]()
-  * [ git ](/data/doc/)
-  * [ docsify ](/data/video/)
-  * [ 工单 ](https://support.pig4cloud.com/)
-* [🥜 杂项]()
-  * [ git ](/data/doc/)
-  * [ docsify ](/data/video/)
-  * [ 工单 ](https://support.pig4cloud.com/)
 
+* [🌶 前端]()
+
+* [🧅 教程]()
+
+  * [ linux](/course/centos/)
+  
+* [🥜 杂项]()
+
+  
 
