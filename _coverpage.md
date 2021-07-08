@@ -1,6 +1,6 @@
 <!-- _coverpage.md -->
 
-![logo](_media/logo.jpg ':size=WIDTHxHEIGHT')
+![logo](_media/logo.png ':size=WIDTHxHEIGHT')
 
 # 琅云<small>666</small>
 
