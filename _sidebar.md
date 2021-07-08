@@ -9,6 +9,9 @@
 
 * 微服务
 
+  * [实践](/microservice/)
+  * [组件](/microservice/)
+
 * 课程
 
   * [centos](/course/centos/)
