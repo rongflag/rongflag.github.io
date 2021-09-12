@@ -2,7 +2,7 @@
 
 ## 1 git整体架构
 
-![01](../../_media//git/01.png)
+![01](../../_media/git/01.png)
 
 Workspace：工作区，就是平时进行开发改动的地方，是当前看到最新的内容，在开发的过程也就是对工作区的操作
 
@@ -315,7 +315,7 @@ $ git archive
 
 如下图所示，下图介绍了经过 rebase 后提交历史的变化情况。
 
-![image-20210622101217813](../../_media//git/02.png)
+![image-20210622101217813](../../_media/git/02.png)
 
 现在我们来用一个例子来解释一下上面的过程。
 
@@ -325,7 +325,7 @@ $ git archive
 
 master 分支如下图：
 
-![image-20210622101251483](../../_media//git/03.png)
+![image-20210622101251483](../../_media/git/03.png)
 
 结合起来看是这样的
 
@@ -350,7 +350,7 @@ master 分支如下图：
 
 在开发中，常会遇到在一个分支上产生了很多的无效的提交，这种情况下使用 rebase 的交互式模式可以把已经发生的多次提交压缩成一次提交，得到了一个干净的提交历史，例如某个分支的提交历史情况如下：
 
-![image-20210622101428830](../../_media//git/06.png)
+![image-20210622101428830](../../_media/git/06.png)
 
 进入交互式模式的方式是执行：
 
@@ -362,7 +362,7 @@ master 分支如下图：
 
 此时会进入一个 vim 的交互式页面，编辑器列出的信息像下列这样。
 
-![image-20210622101504976](../../_media//git/07.png)
+![image-20210622101504976](../../_media/git/07.png)
 
 想要合并这一堆更改，我们要使用 Squash 策略进行合并，即把当前的 commit 和它的上一个 commit 内容进行合并， 大概可以表示为下面这样，在交互模式的 rebase 下，至少保留一个 pick，否则命令会执行失败。
 
@@ -374,7 +374,7 @@ master 分支如下图：
 
 修改文件后 按下 : 然后 wq 保存退出，此时又会弹出一个编辑页面，这个页面是用来编辑提交的信息，修改为 `feat`: 更正，最后保存一下，接着使用 `git branch` 查看提交的 `commit` 信息，`rebase` 后的提交记录如下图所示，是不是清爽了很多？`rebase` 操作可以让我们的提交历史变得更加清晰。
 
-![image-20210622101537113](../../_media//git/08.png)
+![image-20210622101537113](../../_media/git/08.png)
 
 > ​	特别注意，只能在自己使用的 feature 分支上进行 rebase 操作，不允许在集成分支上进行 rebase，因为这种操作会修改集成分支的历史记录。
 
@@ -382,13 +382,13 @@ master 分支如下图：
 
 `git cherry-pick` 可以理解为”挑拣”提交，和 `merge` 合并一个分支的所有提交不同的是，它会获取某一个分支的单笔提交，并作为一个新的提交引入到你当前分支上。当我们需要在本地合入其他分支的提交时，如果我们不想对整个分支进行合并，而是只想将某一次提交合入到本地当前分支上，那么就要使用 `git cherry-pick` 了。 如下场景，以下有三条分支，`feature/cherry-pick1` 和 `feature/cherry-pick2` 都是基于 `master` 检出的两条功能性分支，对应的分支 `log` 记录如下
 
-![image-20210622101632711](../../_media//git/09.png)
+![image-20210622101632711](../../_media/git/09.png)
 
 现在 master 只需要 feature/cherry-pick1 和 feature/cherry-pick2 有关 change 的修改，并不关心有关 fix 内容的修改。此时就可以用 cherry-pick 指令了。
 
 语法： `git cherry-pick [commit-hash]`
 
-commit-hash 表示的是某次 commit 的 hash 值。现在，依次执行以下两条指令 `git cherry-pick e0bb7f3、git cherry-pick c9a3101`，过程中，如果出现冲突，解决冲突后 进行 `git add` ，接着执行 `git cherry-pick --continue`，最后，master 上的提交如下![image-20210622101652138](../../_media//git/10.png)
+commit-hash 表示的是某次 commit 的 hash 值。现在，依次执行以下两条指令 `git cherry-pick e0bb7f3、git cherry-pick c9a3101`，过程中，如果出现冲突，解决冲突后 进行 `git add` ，接着执行 `git cherry-pick --continue`，最后，master 上的提交如下![image-20210622101652138](../../_media/git/10.png)
 
 此时，master 分支上应用了需要的提交，就达到了我们想要的效果。如果需要多个 cherry-pick 需要同步到目标分支，可以简写为 ` git cherry-pick <first-commit-id>...<last-commit-id>`，这是一个左开右闭的区间，也就时说`first-commit-id` 提交带来的代码的改动不会被合并过去，如果需要合并过去，可以使用 `git cherry-pick <first-commit-id>^...<last-commit-id>`，它表示包含 `first-commit-id` 到 `last-commit-id` 在内的提交都会被合并过去。
 
@@ -404,11 +404,11 @@ commit-hash 表示的是某次 commit 的 hash 值。现在，依次执行以下
 
 下面就用一个案例来理解一下这个命令，如下图所示，假设被红框框起来的地方是会引起 bug 的一次提交，在他的提交之后，又进行了2次提交，其中包含了其它同事的提交。
 
-![image-20210622101725980](../../_media//git/11.png)
+![image-20210622101725980](../../_media/git/11.png)
 
 此时想把引起提交的 bug 的干掉，执行 `git revert 1121932`，执行操作后，再打开查看日志，如下图所示，可以看到是新增了一条 commit 记录，这个 commit 的产生的 msg 是自动生成的，Revert 开头，后面跟撤回的 commit-msg 信息 之前的 commit 记录并没有消失，此时也达到了代码回退的效果
 
-![image-20210622101742313](../../_media//git/12.png)
+![image-20210622101742313](../../_media/git/12.png)
 
 此外 git revert 也可以回滚多次的提交
 
@@ -432,7 +432,7 @@ commit-hash 表示的是某次 commit 的 hash 值。现在，依次执行以下
 
 此时，我正在开发一个新功能，修改了 1.js 文件里的内容
 
-![image-20210622101857820](../../_media//git/13.png)
+![image-20210622101857820](../../_media/git/13.png)
 
 还没开发完成，这个时候，我想切换到 hotfix 分支上修复 bug，得暂停下开发切换到 hotfix 分支，但是现在工作区还有内容，此时如果切换分支 Git 会报出下面的错误
 
@@ -444,7 +444,7 @@ commit-hash 表示的是某次 commit 的 hash 值。现在，依次执行以下
 
 此时，我们的工作区已经干净了，可以切换到 hotfix 分支进行 bug 修复的工作，假设我们现在 bug 修复完成了，继续切回 feature 分支进行原本功能的开发，此时只需要执行 git stash pop，之前我们暂存的修改就会恢复到工作区，如下图所示。
 
-![image-20210622101942697](../../_media//git/14.png)
+![image-20210622101942697](../../_media/git/14.png)
 
 当我们想要暂存文件，切换分支做某些事的时候，可以用 `git stash` 这种机制帮助开发。
 
@@ -456,7 +456,7 @@ commit-hash 表示的是某次 commit 的 hash 值。现在，依次执行以下
 
 首先通过 `git status` 查看下现在的状态。
 
-![image-20210622102446192](../../_media//git/15.png)
+![image-20210622102446192](../../_media/git/15.png)
 
 目前我们的工作区是很干净的，没有任何修改的操作，此时，修改一下代码再次查看状态，可以看到，1.js 这个文件被修改了。
 
@@ -464,11 +464,11 @@ commit-hash 表示的是某次 commit 的 hash 值。现在，依次执行以下
 
 现在我们想把 1.js 这个文件恢复到修改前的状态，即撤回工作区的修改，就可以使用  `git checkout -- <filename>` 的命令，如果要撤回多个文件的修改，文件之间使用空格隔开，如下图所示，我们撤回了 1.js 文件的修改，工作区也恢复干净了。
 
-![image-20210622102523518](../../_media//git/17.png)
+![image-20210622102523518](../../_media/git/17.png)
 
 如果说现在我们对文件进行了修改，并且已经提交到暂存区了，这部分文件我们不想要的话，那么就可以通过 `git reset <filename>` 的命令来对特定的文件进行撤销，`git reset` 会撤回所有存在暂存区的文件，如下图所示，查看前后的状态可知，文件最后成功撤回到工作区了。
 
-![image-20210622102608316](../../_media//git/18.png)
+![image-20210622102608316](../../_media/git/18.png)
 
 ## 4.配置 git alias 提升工作效率
 
