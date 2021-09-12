@@ -2,9 +2,12 @@
 
 <!-- docs/_sidebar.md -->
 * java
-
   * [收集](/java/collect/)
+  * [home](home.md)
   * [springboot](/java/springboot/)
+    * [springboot](/java/springboot/xx/)
+    * [springboot2](/java/springboot/xx/)
+      * [springboot3](/java/springboot/xx/)
   * [spring](/java/spring/)
 
 * 微服务
