@@ -3,7 +3,7 @@
   * [🎆Spring](/java/spring/readme.md)
   * [🎇SpringBoot](/java/springboot/readme.md)
   * [🧨SpringMVC](/java/springmvc/readme.md)
-  * [✨Mybatis](/java/mybatis/readme.md)
+  *  [✨Mybatis](/java/mybatis/readme.md)
   * [🎈网络通讯](/java/network/readme.md)
   * [🎉权限](/java/auth/readme.md)
   * [🎊小技巧](/java/skills/readme.md)

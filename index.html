@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>琅云的blog</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="description" content="Description">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
@@ -34,11 +34,13 @@
         onlyCover: true,
         // 搜索
         search: {
-            paths: [], // or 'auto'
-            placeholder: '搜索',
-            noData: '没有匹配的结果',
-
-        },
+			paths: 'auto',
+			placeholder: '🔍 搜索',
+			noData: '😒 找不到结果',
+			// Headline depth, 1 - 6
+			depth: 6,
+			maxAge: 86400000, // 过期时间，单位毫秒，默认一天
+		},
         // 右侧标题展示
         toc: {
             tocMaxLevel: 5,
@@ -46,14 +48,21 @@
         },
         // md 左侧的收缩
         sidebarDisplayLevel: 1,
-        // 回到顶部
-        // scrollToTop: {
-        //     auto: true,
-        //     text: 'Topxxx',
-        //     right: 400,
-        //     bottom: 15,
-        //     offset: 500
-        // }
+        plugins: [
+		function(hook) {
+		  var footer = [
+			'<hr/>',
+			'<footer>',
+			'<span><a href="https://github.com/QingWei-Li">cinwell</a> &copy;2017.</span>',
+			'<span>Proudly published with <a href="https://github.com/docsifyjs/docsify" target="_blank">docsify</a>.</span>',
+			'</footer>'
+		  ].join('');
+
+		  hook.afterEach(function(html) {
+			return html + footer;
+		  });
+		}
+	  ]
 
     }
 </script>
