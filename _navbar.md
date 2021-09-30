@@ -1,5 +1,3 @@
-<!-- _sidebar -->
-
 * [首页](/)
 * ⏰Java
   * [🚀Spring](/java/spring/)

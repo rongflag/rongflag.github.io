@@ -34,11 +34,18 @@
         onlyCover: true,
         // 搜索
         search: {
-            paths: [], // or 'auto'
-            placeholder: '搜索',
-            noData: '没有匹配的结果',
+            paths: 'auto', // or 'auto'
+            placeholder: '🔍 搜索',
+			noData: '😒 找不到结果',
+			depth: 6,
+            maxAge: 86400000,
 
         },
+		 // load from _footer.md
+		loadFooter: true,
+
+		// Or load from _footer.md
+		loadFooter: '_footer.md',
         // 右侧标题展示
         toc: {
             tocMaxLevel: 5,
@@ -46,14 +53,6 @@
         },
         // md 左侧的收缩
         sidebarDisplayLevel: 1,
-        // 回到顶部
-        // scrollToTop: {
-        //     auto: true,
-        //     text: 'Topxxx',
-        //     right: 400,
-        //     bottom: 15,
-        //     offset: 500
-        // }
 
     }
 </script>
@@ -90,11 +89,17 @@
 <!--小女孩-->
 <script src="https://eqcn.ajz.miesnfu.com/wp-content/plugins/wp-3d-pony/live2dw/lib/L2Dwidget.min.js"></script>
 <script>
+   //  小帅哥： https://unpkg.com/live2d-widget-model-chitose@1.0.5/assets/chitose.model.json
+        //  萌娘：https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json 
+        //  小可爱（女）：https://unpkg.com/live2d-widget-model-koharu@1.0.5/assets/koharu.model.json 
+        //  小可爱（男）：https://unpkg.com/live2d-widget-model-haruto@1.0.5/assets/haruto.model.json
+        //  初音：https://unpkg.com/live2d-widget-model-miku@1.0.5/assets/miku.model.json 
+		//  https://unpkg.com/live2d-widget-model-tororo@1.0.5/assets/tororo.model.json
     L2Dwidget.init({
         "model": {
             //jsonpath控制显示那个小萝莉模型，
             //(切换模型需要改动)
-            jsonPath: "https://unpkg.com/live2d-widget-model-koharu@1.0.5/assets/koharu.model.json",
+            jsonPath: "https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json ",
             "scale": 1
         },
         "display": {
@@ -128,7 +133,12 @@
             titleAsText: true
         });
     });
+	
+
+
 </script>
+<!-- footer 插件 -->
+<script src="//cdn.jsdelivr.net/npm/@alertbox/docsify-footer/dist/docsify-footer.min.js"></script>
 
 </body>
 </html>
